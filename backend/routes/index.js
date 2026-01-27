@@ -51,7 +51,7 @@ router.get("/voyages", async (req, res) => {
         },
       },
       //Projection Mongo: inclure uniquement ces champs + exclure _id
-      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 0 }
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1 }
     ).sort({ date: 1 });
 
     const formatted = voyages.map((v) => ({
@@ -61,7 +61,7 @@ router.get("/voyages", async (req, res) => {
       price: v.price,
       isCarted : v.isCarted,
       isBooked : v.isBooked,
-
+      _id : v._id
     }));
 
     return res.status(200).json(formatted);
@@ -72,5 +72,44 @@ router.get("/voyages", async (req, res) => {
     });
   }
 });
+
+//POST pour modifier la propriété isCarted vers true 
+
+router.post("/voyages/cart", async (req, res) => {
+  try {
+    const { voyageId } = req.body;
+
+    if (!voyageId) {
+      return res.status(400).json({ message: "voyageId requis" });
+    }
+
+    // Met à jour isCarted
+    const updatedVoyage = await Voyage.findOneAndUpdate(
+      { _id: voyageId },
+      { $set: { isCarted: true } },
+      { new: true }
+    );
+
+    if (!updatedVoyage) {
+      return res.status(404).json({ message: "Voyage introuvable" });
+    }
+
+    // Réponse = uniquement departure/arrival/hour/price
+    return res.status(200).json({
+      departure: updatedVoyage.departure,
+      arrival: updatedVoyage.arrival,
+      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      price: updatedVoyage.price,
+      isCarted: updatedVoyage.isCarted
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
+
+
 
 module.exports = router;
