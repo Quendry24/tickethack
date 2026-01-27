@@ -75,7 +75,7 @@ router.get("/voyages", async (req, res) => {
 
 //POST pour modifier la propriété isCarted vers true 
 
-router.post("/voyages/cart", async (req, res) => {
+router.post("/voyages/addtocart", async (req, res) => {
   try {
     const { voyageId } = req.body;
 
@@ -112,7 +112,7 @@ router.post("/voyages/cart", async (req, res) => {
 
 //POST pour envoyer les voyages du cart vers la partie book
 
-router.post("/voyages/book", async (req, res) => {
+router.post("/voyages/addtobook", async (req, res) => {
   try {
     const { voyageId } = req.body;
 
@@ -139,6 +139,43 @@ router.post("/voyages/book", async (req, res) => {
       price: updatedVoyage.price,
       isCarted: updatedVoyage.isCarted,
       isBooked: updatedVoyage.isBooked
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
+
+//POST pour supprimer un élément en mettant à jour le isCarted à false quand il était true
+
+router.post("/voyages/deletefromcart", async (req, res) => {
+  try {
+    const { voyageId } = req.body;
+
+    if (!voyageId) {
+      return res.status(400).json({ message: "voyageId requis" });
+    }
+
+    // Met à jour isCarted
+    const updatedVoyage = await Voyage.findOneAndUpdate(
+      { _id: voyageId },
+      { $set: { isCarted: false } },
+      { new: true }
+    );
+
+    if (!updatedVoyage) {
+      return res.status(404).json({ message: "Voyage introuvable" });
+    }
+
+    // Réponse = uniquement departure/arrival/hour/price
+    return res.status(200).json({
+      departure: updatedVoyage.departure,
+      arrival: updatedVoyage.arrival,
+      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      price: updatedVoyage.price,
+      isCarted: updatedVoyage.isCarted
     });
   } catch (error) {
     return res.status(500).json({
