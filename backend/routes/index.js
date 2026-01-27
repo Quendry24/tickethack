@@ -185,4 +185,21 @@ router.post("/voyages/deletefromcart", async (req, res) => {
   }
 });
 
+/*GET tous les voyages de la BDD pour isCartedistrue*/
+
+router.get("/voyages/allisCartedisTrue", async(req,res) => {
+    try {
+      const voyages = await Voyage.find(
+        {isCarted : true},
+        { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1 }
+      );
+      return res.status(200).json(voyages);
+    }catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
