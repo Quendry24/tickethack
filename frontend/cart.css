@@ -1,0 +1,108 @@
+body{
+    margin:0;
+    height:100vh;
+    width:100vw;
+    background-color:#eff2f1;
+
+}
+#header{
+    background-color:white;
+    height : 10%;
+    display : flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    padding: 0 20px;
+}
+#logo{
+    color : #459e85;
+        text-decoration:none;
+
+}
+#nav{
+    display :flex;
+    flex-direction:row;
+}
+
+#nav>a{
+    margin : 10px;
+        text-decoration:none;
+        color:black
+
+}
+#nav>a:hover{
+    cursor:pointer;
+}
+#container{
+    height:90%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#cart{
+    background-color : white;
+    border-radius:10px;
+    width:70%;
+    height:80%;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+#bodyCart{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+    width:85%;
+    height:75%;
+    overflow:scroll;
+}
+
+.trajet{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    background-color:#f5eeee;
+    border-radius:5px;
+    margin:10px;
+    padding:0 10px;
+}
+.delBtn{
+    color:white;
+    background-color:#459e85;
+    border:none;
+    padding:10px;
+    border-radius:4px;
+}
+
+#footerCart{
+    width:100%;
+    height:25%;
+    background-color:#00153e;
+    color : white;
+    display : flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:0 0 10px 10px;
+}
+
+#footerCart>p{
+    margin:10px 50px;
+}
+
+
+#purchaseBtn{
+    color:white;
+    background-color:#459e85;
+    border:none;
+    padding:10px;
+    border-radius:4px;
+    margin:10px 50px;
+}
+
