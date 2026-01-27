@@ -108,6 +108,11 @@ body{
     border-radius:4px;
     margin-top:30%;
 }
+
+#searchBtn:hover{
+    cursor:pointer;
+}
+
 #returnCard>img{
     width:80%;
 }
@@ -127,6 +132,7 @@ body{
     border-radius:10px;
     width:30%;
     height:70%;
+    overflow:auto;text-align:center;
 }
 
 .trajet{
@@ -137,6 +143,7 @@ body{
     width:100%;
     background-color:#f5eeee;
     border-radius:5px;
+    margin:5px;
 }
 .bookBtn{
     color:white;
