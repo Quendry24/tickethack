@@ -110,6 +110,42 @@ router.post("/voyages/cart", async (req, res) => {
   }
 });
 
+//POST pour envoyer les voyages du cart vers la partie book
 
+router.post("/voyages/book", async (req, res) => {
+  try {
+    const { voyageId } = req.body;
+
+    if (!voyageId) {
+      return res.status(400).json({ message: "voyageId requis" });
+    }
+
+    // Met à jour isBooked
+    const updatedVoyage = await Voyage.findOneAndUpdate(
+      { _id: voyageId },
+      { $set: { isBooked: true }, $set: {isCarted: false} },
+      { new: true }
+    );
+
+    if (!updatedVoyage) {
+      return res.status(404).json({ message: "Voyage introuvable" });
+    }
+
+    // Réponse = uniquement departure/arrival/hour/price
+    return res.status(200).json({
+      departure: updatedVoyage.departure,
+      arrival: updatedVoyage.arrival,
+      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      price: updatedVoyage.price,
+      isCarted: updatedVoyage.isCarted,
+      isBooked: updatedVoyage.isBooked
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;
