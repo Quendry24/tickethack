@@ -60,6 +60,9 @@ router.get("/voyages", async (req, res) => {
       arrival: v.arrival,
       hour: moment.utc(v.date).format("HH:mm"),
       price: v.price,
+      isCarted : v.isCarted,
+      isBooked : v.isBooked,
+
     }));
 
     return res.status(200).json(formatted);
