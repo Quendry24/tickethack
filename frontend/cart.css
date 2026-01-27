@@ -72,6 +72,7 @@ body{
     margin:10px;
     padding:0 10px;
 }
+
 .delBtn{
     color:white;
     background-color:#459e85;
@@ -95,7 +96,6 @@ body{
 #footerCart>p{
     margin:10px 50px;
 }
-
 
 #purchaseBtn{
     color:white;
