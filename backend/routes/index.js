@@ -23,9 +23,11 @@ router.get('/voyages', async (req, res) => {
       });
     }
 
+    const now = new Date();
+
     const voyages = await Voyage.find(
-      {departure,arrival},
-      "departure arrival date price -_id"
+      {departure,arrival, date: { $gte: now }},
+      "departure arrival date price",
   );
 
     res.status(200).json(voyages);
