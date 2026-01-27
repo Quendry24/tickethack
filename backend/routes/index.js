@@ -52,7 +52,7 @@ router.get("/voyages", async (req, res) => {
         },
       },
       //Projection Mongo: inclure uniquement ces champs + exclure _id
-      { departure: 1, arrival: 1, date: 1, price: 1, _id: 0 }
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 0 }
     ).sort({ date: 1 });
 
     const formatted = voyages.map((v) => ({
