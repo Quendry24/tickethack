@@ -41,7 +41,12 @@ body{
     background-color : white;
     border-radius:10px;
     width:70%;
-    text-align:center
+    text-align:center;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    overflow:scroll;
 }
 
 .trajet{
@@ -49,15 +54,14 @@ body{
     flex-direction:row;
     justify-content:space-around;
     align-items:center;
-    width:100%;
+    width:90%;
     background-color:#f5eeee;
     border-radius:5px;
+    margin : 5px;
 }
-.bookBtn{
-    color:white;
-    background-color:#459e85;
-    border:none;
-    padding:10px;
-    border-radius:4px;
 
+#enjoy{
+    color:#459e85;
+    border-top:2px solid grey;
+    padding:10px 0 0 0 ;
 }

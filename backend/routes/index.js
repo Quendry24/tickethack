@@ -6,12 +6,11 @@ var Voyage = require('../models/voyages');
 const moment = require("moment");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 /* GET /voyages : les données de voyage à partir de departure et arrival*/
-
 
 router.get("/voyages", async (req, res) => {
   try {
