@@ -123,7 +123,7 @@ router.post("/voyages/addtobook", async (req, res) => {
     // Met à jour isBooked
     const updatedVoyage = await Voyage.findOneAndUpdate(
       { _id: voyageId },
-      { $set: { isBooked: true }, $set: { isCarted: false } },
+      { $set: { isBooked: true, isCarted: false } },
       { new: true }
     );
 
