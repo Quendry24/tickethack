@@ -9,16 +9,17 @@ fetch('http://localhost:3000/voyages/allisBookedisTrue').then(res => res.json())
     if (data.length > 0) {
         document.querySelector('#book').innerHTML = `
                 <p> My bookings</p>`
+        let remaining = '';
         for (let trajet of data) {
             const restDay = trajet.timeRemaining.days
             const restHours = trajet.timeRemaining.hours
             const restMin = trajet.timeRemaining.minutes
             const restTime = `${restDay} jours, ${restHours} heures, ${restMin} min`
-            let remaining = '';
+
             if (restDay < 0 || restHours < 0 || restMin < 0) {
-                remaining = 'trop tard mon gars';
+                remaining = 'Trip expired';
             } else {
-                remaining = `Departure dans ${restTime}`
+                remaining = `Depart dans ${restTime}`
             }
             console.log(restTime)
             console.log(trajet)
@@ -27,9 +28,11 @@ fetch('http://localhost:3000/voyages/allisBookedisTrue').then(res => res.json())
                             <p>${trajet.departure}>${trajet.arrival}</p>
                             <p>${trajet.hour}</p>
                             <p class='price'><strong>${trajet.price}€</strong></p>
-                            <p>${remaining}</p>
+                            <p id='restTime'>${remaining}</p>
                     </div>            
                          `
+            remaining === 'Trip expired' && (document.querySelector('#restTime').style.color = 'red')
+            remaining = ''
         }
         document.querySelector('#book').innerHTML += `<p id="enjoy">Enjoy your travel with Tickethack!</p>`
     } else {

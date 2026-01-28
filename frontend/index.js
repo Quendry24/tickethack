@@ -26,7 +26,7 @@ document.querySelector('#searchBtn').addEventListener('click', function () {
     const arrival = document.querySelector('#arrivalCity').value
     let date = document.querySelector('#searchDate').value
     fetch(`http://localhost:3000/voyages?departure=${departure}&arrival=${arrival}&date=${date}`).then(res => res.json()).then(data => {
-        if (data.message === "Remplissez Departure, Arrival et Date !") {
+        if (data.message === "Remplissez Departure, Arrival et Date !" || data.message === "Aucun voyage trouvé!") {
             document.querySelector('#returnCard').innerHTML = `
             <img src=".\images\train.png" alt="train" id="icon">
                 <p>It's time to book your future trip</p> 
