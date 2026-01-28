@@ -31,8 +31,8 @@ router.get("/voyages", async (req, res) => {
     const searchMomentUTC = moment.utc(date);
 
     // Définir la plage horaire
-    const dayStartUTC = searchMomentUTC.startOf("day");
-    const dayEndUTC = searchMomentUTC.endOf("day");
+    const dayStartUTC = searchMomentUTC.clone().startOf("day");
+    const dayEndUTC = searchMomentUTC.clone().endOf("day");
 
     //Si c'est aujourd'hui, on enlève les voyages antérieures à l'heure de la recherche
 
