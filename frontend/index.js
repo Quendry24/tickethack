@@ -102,7 +102,7 @@ document.querySelector('#searchBtn').addEventListener('click', function () {
                             for (let trajet of data) {
                                 document.querySelector('#returnCard').innerHTML += `
                         <div class="trajet">
-                            <p>${trajet.arrival}>${trajet.departure}</p>
+                            <p>${trajet.departure}>${trajet.arrival}</p>
                             <p>${trajet.hour}</p>
                             <p><strong>${trajet.price}€</strong></p>
                             <button class="bookBtn" id='${trajet['_id']}'>Book</button>
