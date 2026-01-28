@@ -39,7 +39,7 @@ router.get("/voyages", async (req, res) => {
     const nowUTC = moment.utc();
     const isTodayUTC = nowUTC.isSame(dayStartUTC, "day");
 
-    const effectiveStartUTC = isTodayUTC ? searchMomentUTC : dayStartUTC;
+    const effectiveStartUTC = isTodayUTC ? nowUTC : dayStartUTC;
     //Renvoyer les données demandées en fonction du jour choisi
     const voyages = await Voyage.find(
       {
