@@ -3,7 +3,8 @@ var router = express.Router();
 
 var Voyage = require('../models/voyages');
 
-const moment = require("moment");
+const moment = require("moment-timezone");
+const tz = "Europe/Paris";
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -28,26 +29,29 @@ router.get("/voyages", async (req, res) => {
     const arrivalClean = arrival.trim();
 
     //Si pas d'heure c'est minuit sinon c'est l'heure précisée
-    const searchMomentUTC = moment.utc(date);
+    const searchMomentTZ = moment.tz(date, tz);
+    if (!searchMomentTZ.isValid()) {
+      return res.status(400).json({ message: "Date invalide" });
+    }
 
     // Définir la plage horaire
-    const dayStartUTC = searchMomentUTC.clone().startOf("day");
-    const dayEndUTC = searchMomentUTC.clone().endOf("day");
+    const dayStartTZ = searchMomentTZ.clone().startOf("day");
+    const dayEndTZ = searchMomentTZ.clone().endOf("day");
 
     //Si c'est aujourd'hui, on enlève les voyages antérieures à l'heure de la recherche
 
-    const nowUTC = moment.utc();
-    const isTodayUTC = nowUTC.isSame(dayStartUTC, "day");
+    const nowTZ = moment.tz(tz);
+    const isTodayTZ = nowTZ.isSame(dayStartTZ, "day");
 
-    const effectiveStartUTC = isTodayUTC ? nowUTC : dayStartUTC;
+    const effectiveStartTZ = isTodayTZ ? nowTZ : dayStartTZ;
     //Renvoyer les données demandées en fonction du jour choisi
     const voyages = await Voyage.find(
       {
         departure: new RegExp(`^${departureClean}$`, "i"),
         arrival: new RegExp(`^${arrivalClean}$`, "i"),
         date: {
-          $gte: effectiveStartUTC.toDate(),
-          $lte: dayEndUTC.toDate(),
+          $gte: effectiveStartTZ.toDate(),
+          $lte: dayEndTZ.toDate(),
         },
       },
       //Projection Mongo: inclure uniquement ces champs 
@@ -63,7 +67,7 @@ router.get("/voyages", async (req, res) => {
     const formatted = voyages.map((v) => ({
       departure: v.departure,
       arrival: v.arrival,
-      hour: moment.utc(v.date).format("HH:mm"),
+      hour: moment(v.date).tz(tz).format("HH:mm"),
       price: v.price,
       isCarted: v.isCarted,
       isBooked: v.isBooked,
@@ -104,7 +108,7 @@ router.post("/voyages/addtocart", async (req, res) => {
     return res.status(200).json({
       departure: updatedVoyage.departure,
       arrival: updatedVoyage.arrival,
-      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      hour: moment(updatedVoyage.date).tz(tz).format("HH:mm"),
       price: updatedVoyage.price,
       isCarted: updatedVoyage.isCarted
     });
@@ -119,6 +123,7 @@ router.post("/voyages/addtocart", async (req, res) => {
 //POST pour envoyer les voyages du cart vers la partie book
 
 router.post("/voyages/addtobook", async (req, res) => {
+  
   try {
     const { voyageId } = req.body;
 
@@ -141,7 +146,7 @@ router.post("/voyages/addtobook", async (req, res) => {
     return res.status(200).json({
       departure: updatedVoyage.departure,
       arrival: updatedVoyage.arrival,
-      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      hour: moment(updatedVoyage.date).tz(tz).format("HH:mm"),
       price: updatedVoyage.price,
       isCarted: updatedVoyage.isCarted,
       isBooked: updatedVoyage.isBooked
@@ -179,7 +184,7 @@ router.post("/voyages/deletefromcart", async (req, res) => {
     return res.status(200).json({
       departure: updatedVoyage.departure,
       arrival: updatedVoyage.arrival,
-      hour: moment.utc(updatedVoyage.date).format("HH:mm"),
+      hour: moment(updatedVoyage.date).tz(tz).format("HH:mm"),
       price: updatedVoyage.price,
       isCarted: updatedVoyage.isCarted
     });
@@ -203,10 +208,10 @@ router.get("/voyages/allisCartedisTrue", async (req, res) => {
       voyages.map(v => ({
         departure: v.departure,
         arrival: v.arrival,
-        hour: moment.utc(v.date).format("HH:mm"),
+        hour: moment(v.date).tz(tz).format("HH:mm"),
         price: v.price,
         isCarted: v.isCarted,
-        _id: v.id
+        _id: v._id
       }))
     );
   } catch (error) {
@@ -228,19 +233,19 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
     return res.status(200).json(
       voyages.map(v => {
 
-        const now = moment.utc();
-        const departureDate = moment.utc(v.date);
+        const now = moment.tz(tz);
+        const departureDate = moment(v.date).tz(tz);
 
         const duration = moment.duration(departureDate.diff(now));
 
         return {
           departure: v.departure,
           arrival: v.arrival,
-          hour: moment.utc(v.date).format("HH:mm"),
+          hour: moment(v.date).tz(tz).format("HH:mm"),
           price: v.price,
           isCarted: v.isCarted,
           isBooked: v.isBooked,
-          _id: v.id,
+          _id: v._id,
           timeRemaining: {
             days: duration.days(),
             hours: duration.hours(),
