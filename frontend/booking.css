@@ -66,3 +66,13 @@ body{
     border-top:2px solid grey;
     padding:10px 0 0 0 ;
 }
+
+#reset{
+    color:white;
+    background-color:#459e85;
+    border:none;
+    padding:10px;
+    border-radius:4px;
+    margin-bottom : 10px;
+    cursor:pointer;
+}

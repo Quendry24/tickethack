@@ -41,10 +41,22 @@ fetch('http://localhost:3000/voyages/allisBookedisTrue').then(res => res.json())
                     </div>            
                          `
         }
-        document.querySelector('#book').innerHTML += `<p id="enjoy">Enjoy your travel with Tickethack!</p>`
+        document.querySelector('#book').innerHTML += `<p id="enjoy">Enjoy your travel with Tickethack!</p>
+        <button id="reset">Reset </button>`
     } else {
         document.querySelector('#book').innerHTML = `
             <p>No booking yet.</p>
             <p>Why not plan a trip?</p>`
     }
+    reset()
 })
+
+function reset() {
+    document.querySelector('#reset').addEventListener('click', function () {
+        fetch('http://localhost:3000/voyages/deletefrombook', {
+            method: 'POST'
+        }).then(() => console.log('Every Bookings Deleted'))
+        window.location.assign('booking.html')
+
+    })
+}
