@@ -262,6 +262,31 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
   }
 });
 
+/*POST Changer le isBooked true vers false*/
+
+router.post("/voyages/deletefrombook", async (req, res) => {
+  try {
+
+    // Met à jour isBooked
+    const result = await Voyage.updateMany(
+      { isBooked : true },
+      { $set: { isBooked: false } },
+    );
+
+    // Réponse voyage annulés
+    return res.status(200).json({
+      message: "Voyages annulés!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
+
+/*GET Récupérer toute la BDD*/
+
 router.get("/voyagesAll", async (req, res) => {
   const voyages = await Voyage.find()
   return res.status(200).json(voyages);
