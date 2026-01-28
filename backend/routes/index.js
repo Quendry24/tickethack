@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 router.get("/voyages", async (req, res) => {
   try {
     const { departure, arrival, date } = req.query;
-
+    
     // Validation champs renseignés
     if (!departure || !arrival || !date) {
       return res.status(400).json({
@@ -31,8 +31,8 @@ router.get("/voyages", async (req, res) => {
     const searchMomentUTC = moment.utc(date);
 
     // Définir la plage horaire
-    const dayStartUTC = moment.utc(date).startOf("day");
-    const dayEndUTC = moment.utc(date).endOf("day");
+    const dayStartUTC = searchMomentUTC.startOf("day");
+    const dayEndUTC = searchMomentUTC.endOf("day");
 
     //Si c'est aujourd'hui, on enlève les voyages antérieures à l'heure de la recherche
 
@@ -50,10 +50,16 @@ router.get("/voyages", async (req, res) => {
           $lte: dayEndUTC.toDate(),
         },
       },
-      //Projection Mongo: inclure uniquement ces champs + exclure _id
+    //Projection Mongo: inclure uniquement ces champs 
       { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1 }
     ).sort({ date: 1 });
 
+    // Si les voyages n'existent pas
+    if (voyages.length === 0) {
+  return res.status(200).json({
+    message: "Aucun voyage trouvé!"
+      });
+    }
     const formatted = voyages.map((v) => ({
       departure: v.departure,
       arrival: v.arrival,
@@ -191,7 +197,7 @@ router.get("/voyages/allisCartedisTrue", async (req, res) => {
   try {
     const voyages = await Voyage.find(
       { isCarted: true },
-      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1 }
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1}
     );
     return res.status(200).json(
       voyages.map(v => ({
@@ -199,7 +205,8 @@ router.get("/voyages/allisCartedisTrue", async (req, res) => {
       arrival: v.arrival,
       hour: moment.utc(v.date).format("HH:mm"),
       price: v.price,
-      isCarted: v.isCarted
+      isCarted: v.isCarted,
+      _id: v.id
     }))
   );
   } catch (error) {
@@ -216,7 +223,7 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
   try {
     const voyages = await Voyage.find(
       { isBooked: true },
-      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1 }
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id:1 }
     );
     return res.status(200).json(
       voyages.map(v => {
@@ -233,6 +240,7 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
       price: v.price,
       isCarted: v.isCarted,
       isBooked: v.isBooked,
+      _id: v.id,
       timeRemaining: {
             days: duration.days(),
             hours: duration.hours(),
