@@ -123,7 +123,7 @@ router.post("/voyages/addtobook", async (req, res) => {
     // Met à jour isBooked
     const updatedVoyage = await Voyage.findOneAndUpdate(
       { _id: voyageId },
-      { $set: { isBooked: true }, $set: { isCarted: false } },
+      { $set: { isBooked: true, isCarted: false }},
       { new: true }
     );
 
@@ -193,7 +193,54 @@ router.get("/voyages/allisCartedisTrue", async (req, res) => {
       { isCarted: true },
       { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1 }
     );
-    return res.status(200).json(voyages);
+    return res.status(200).json(
+      voyages.map(v => ({
+      departure: v.departure,
+      arrival: v.arrival,
+      hour: moment.utc(v.date).format("HH:mm"),
+      price: v.price,
+      isCarted: v.isCarted
+    }))
+  );
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+  }
+});
+
+/*GET tous les voyages de la BDD pour isBookedistrue*/
+
+router.get("/voyages/allisBookedisTrue", async (req, res) => {
+  try {
+    const voyages = await Voyage.find(
+      { isBooked: true },
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1 }
+    );
+    return res.status(200).json(
+      voyages.map(v => {
+
+        const now = moment.utc();
+        const departureDate = moment.utc(v.date);
+
+        const duration = moment.duration(departureDate.diff(now));
+
+      return {  
+      departure: v.departure,
+      arrival: v.arrival,
+      hour: moment.utc(v.date).format("HH:mm"),
+      price: v.price,
+      isCarted: v.isCarted,
+      isBooked: v.isBooked,
+      timeRemaining: {
+            days: duration.days(),
+            hours: duration.hours(),
+            minutes: duration.minutes()
+    }
+  };
+  })
+);
   } catch (error) {
     return res.status(500).json({
       message: "Erreur serveur",
