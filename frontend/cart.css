@@ -55,11 +55,11 @@ body{
 #bodyCart{
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
+    justify-content:start;
     align-items:center;
     width:85%;
     height:75%;
-    overflow:scroll;
+    overflow:auto;
 }
 
 .trajet{
@@ -71,6 +71,7 @@ body{
     border-radius:5px;
     margin:10px;
     padding:0 10px;
+    width:80%;
 }
 
 .delBtn{
@@ -79,6 +80,11 @@ body{
     border:none;
     padding:10px;
     border-radius:4px;
+    
+}
+
+.delBtn:hover{
+    cursor:pointer;
 }
 
 #footerCart{
@@ -104,5 +110,9 @@ body{
     padding:10px;
     border-radius:4px;
     margin:10px 50px;
+}
+
+#purchaseBtn:hover{
+    cursor:pointer;
 }
 

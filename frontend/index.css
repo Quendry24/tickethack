@@ -2,16 +2,16 @@ body{
     margin:0;
     height:100vh;
     width:100vw;
-
 }
 #header{
     background-color:white;
-    height : 10%;
+    height : 10vh;
     display : flex;
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
     padding: 0 20px;
+    position:static;
 }
 #logo{
     color : #459e85;
@@ -46,13 +46,16 @@ body{
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    height:90%;
+    min-height:90vh;
+
 }
 
 #title{
     color:white;
     border:1px solid red;
     text-align:center;
+    height:20%;
+    object-position:top;
 }
 #title>h1{
     font-size:42px;
@@ -70,6 +73,7 @@ body{
     padding : 30px;
     width:60%;
     height:100%;
+    gap:40px
 
 }
 
@@ -80,9 +84,10 @@ body{
     flex-direction:column;
     background-color : white;
     border-radius:10px;
-    width:30%;
-    height:70%;
-
+    width:240px;
+    height:320px;
+    overflow-y:auto;
+    text-align:center;
 }
 
 #searchCard>input{
@@ -90,6 +95,7 @@ body{
     border-radius:4px;
     border:none;
     padding:10px
+
 }
 
 #searchCard>input#departureCity{
@@ -97,7 +103,7 @@ body{
 }
 
 #searchCard>input#arrivalCity{
-    margin-bottom:20%;
+    margin-bottom:40px;;
 }
 
 #searchBtn{
@@ -106,7 +112,7 @@ body{
     border:none;
     padding:10px;
     border-radius:4px;
-    margin-top:30%;
+    margin-top:130px
 }
 
 #searchBtn:hover{
@@ -114,7 +120,7 @@ body{
 }
 
 #returnCard>img{
-    width:80%;
+    width:70%;
 }
 
 #returnCard>p{
@@ -128,11 +134,13 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:start;
     background-color : white;
     border-radius:10px;
-    width:30%;
-    height:70%;
-    overflow:auto;text-align:center;
+    width:240px;
+    height:320px;
+    overflow-y:auto;
+    text-align:center;
 }
 
 .trajet{
@@ -140,7 +148,7 @@ body{
     flex-direction:row;
     justify-content:space-around;
     align-items:center;
-    width:100%;
+    width:95%;
     background-color:#f5eeee;
     border-radius:5px;
     margin:5px;
@@ -152,6 +160,10 @@ body{
     padding:10px;
     border-radius:4px;
 
+}
+
+.bookBtn:hover{
+    cursor:pointer;
 }
 
 
