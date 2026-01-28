@@ -104,9 +104,12 @@ body{
 #searchCard>input#departureCity{
     border-bottom:1px solid grey;
 }
-
 #searchCard>input#arrivalCity{
-    margin-bottom:40px;;
+    margin-bottom:10px;
+}
+
+#searchCard>#returnBtn{
+    margin-bottom:20px;
 }
 
 #searchBtn{
@@ -129,7 +132,6 @@ body{
 #returnCard>p{
     border-top:3px solid #459e85;
     padding:20px;
-    color :white;
 }
 
 #returnCard{
@@ -154,6 +156,8 @@ body{
     backdrop-filter: blur(9.8px);
     -webkit-backdrop-filter: blur(9.8px);
     border: 1px solid rgba(255, 255, 255, 0.43);
+    
+    color :white;
 }
 
 .trajet{
@@ -165,6 +169,7 @@ body{
     background-color:#f5eeee;
     border-radius:5px;
     margin:5px;
+    color :black;
 }
 .bookBtn{
     color:white;

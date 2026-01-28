@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 router.get("/voyages", async (req, res) => {
   try {
     const { departure, arrival, date } = req.query;
-    
+
     // Validation champs renseignés
     if (!departure || !arrival || !date) {
       return res.status(400).json({
@@ -50,14 +50,14 @@ router.get("/voyages", async (req, res) => {
           $lte: dayEndUTC.toDate(),
         },
       },
-    //Projection Mongo: inclure uniquement ces champs 
+      //Projection Mongo: inclure uniquement ces champs 
       { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1 }
     ).sort({ date: 1 });
 
     // Si les voyages n'existent pas
     if (voyages.length === 0) {
-  return res.status(200).json({
-    message: "Aucun voyage trouvé!"
+      return res.status(200).json({
+        message: "Aucun voyage trouvé!"
       });
     }
     const formatted = voyages.map((v) => ({
@@ -129,7 +129,7 @@ router.post("/voyages/addtobook", async (req, res) => {
     // Met à jour isBooked
     const updatedVoyage = await Voyage.findOneAndUpdate(
       { _id: voyageId },
-      { $set: { isBooked: true, isCarted: false }},
+      { $set: { isBooked: true, isCarted: false } },
       { new: true }
     );
 
@@ -197,18 +197,18 @@ router.get("/voyages/allisCartedisTrue", async (req, res) => {
   try {
     const voyages = await Voyage.find(
       { isCarted: true },
-      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1}
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1 }
     );
     return res.status(200).json(
       voyages.map(v => ({
-      departure: v.departure,
-      arrival: v.arrival,
-      hour: moment.utc(v.date).format("HH:mm"),
-      price: v.price,
-      isCarted: v.isCarted,
-      _id: v.id
-    }))
-  );
+        departure: v.departure,
+        arrival: v.arrival,
+        hour: moment.utc(v.date).format("HH:mm"),
+        price: v.price,
+        isCarted: v.isCarted,
+        _id: v.id
+      }))
+    );
   } catch (error) {
     return res.status(500).json({
       message: "Erreur serveur",
@@ -223,7 +223,7 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
   try {
     const voyages = await Voyage.find(
       { isBooked: true },
-      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id:1 }
+      { departure: 1, arrival: 1, date: 1, price: 1, isCarted: 1, isBooked: 1, _id: 1 }
     );
     return res.status(200).json(
       voyages.map(v => {
@@ -233,22 +233,22 @@ router.get("/voyages/allisBookedisTrue", async (req, res) => {
 
         const duration = moment.duration(departureDate.diff(now));
 
-      return {  
-      departure: v.departure,
-      arrival: v.arrival,
-      hour: moment.utc(v.date).format("HH:mm"),
-      price: v.price,
-      isCarted: v.isCarted,
-      isBooked: v.isBooked,
-      _id: v.id,
-      timeRemaining: {
+        return {
+          departure: v.departure,
+          arrival: v.arrival,
+          hour: moment.utc(v.date).format("HH:mm"),
+          price: v.price,
+          isCarted: v.isCarted,
+          isBooked: v.isBooked,
+          _id: v.id,
+          timeRemaining: {
             days: duration.days(),
             hours: duration.hours(),
             minutes: duration.minutes()
-    }
-  };
-  })
-);
+          }
+        };
+      })
+    );
   } catch (error) {
     return res.status(500).json({
       message: "Erreur serveur",
