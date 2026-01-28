@@ -18,6 +18,7 @@ function deleteFromCart() {
 fetch('http://localhost:3000/voyages/allisCartedisTrue').then(res => res.json()).then(data => {
     data.length > 0 ? document.querySelector('#cart').textContent = `Cart (${data.length})` : document.querySelector('#cart').textContent = 'Cart'
     let totalPrice = 0;
+    console.log(data)
     for (let trajet of data) {
         console.log(trajet)
         document.querySelector('#bodyCart').innerHTML += `
@@ -37,6 +38,7 @@ fetch('http://localhost:3000/voyages/allisCartedisTrue').then(res => res.json())
 document.querySelector('#purchaseBtn').addEventListener('click', function () {
     const tripToPurchase = document.querySelectorAll('.trajet')
     for (let trip of tripToPurchase) {
+        console.log(trip)
         const voyageId = trajet.id
         console.log('id', voyageId)
         console.log('trip', trip)
@@ -45,6 +47,7 @@ document.querySelector('#purchaseBtn').addEventListener('click', function () {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ voyageId })
         }).then(res => res.json()).then(data => {
+            console.log(data)
             console.log(`Trip ${trip.id} booked`)
         })
     }
