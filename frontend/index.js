@@ -1,3 +1,7 @@
+fetch('http://localhost:3000/voyages/allisCartedisTrue').then(res => res.json()).then(data => {
+    data.length > 0 ? document.querySelector('#cart').textContent = `Cart (${data.length})` : document.querySelector('#cart').textContent = 'Cart'
+})
+
 function tripAddToCart() {
     const tripsToBook = document.querySelectorAll('.bookBtn')
     for (let trip of tripsToBook) {
@@ -16,9 +20,6 @@ function tripAddToCart() {
 
     }
 }
-fetch('http://localhost:3000/voyages/allisCartedisTrue').then(res => res.json()).then(data => {
-    data.length > 0 ? document.querySelector('#cart').textContent = `Cart (${data.length})` : document.querySelector('#cart').textContent = 'Cart'
-})
 
 document.querySelector('#searchBtn').addEventListener('click', function () {
     const departure = document.querySelector('#departureCity').value
