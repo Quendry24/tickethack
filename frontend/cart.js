@@ -18,28 +18,36 @@ function deleteFromCart() {
 fetch('http://localhost:3000/voyages/allisCartedisTrue').then(res => res.json()).then(data => {
     data.length > 0 ? document.querySelector('#cart').textContent = `Cart (${data.length})` : document.querySelector('#cart').textContent = 'Cart'
     let totalPrice = 0;
-    console.log(data)
-    for (let trajet of data) {
-        console.log(trajet)
-        document.querySelector('#bodyCart').innerHTML += `
-               <div class="trajet id='${trajet['_id']}">
-                        <p>${trajet.departure}>${trajet.arrival}</p>
-                        <p>${trajet.hour}</p>
-                        <p class='price'><strong>${trajet.price}€</strong></p>
-                        <button class="delBtn" id='${trajet['_id']}'>X</button>
-                    </div>            
-                     `
-        totalPrice += trajet.price
+    console.log('data', data)
+    if (data.length) {
+        document.querySelector('#bodyCart').innerHTML = `<p>My cart</p>`
+        for (let trajet of data) {
+            console.log(trajet['_id'])
+            document.querySelector('#bodyCart').innerHTML += `
+                   <div class="trajet" id='${trajet['_id']}'>
+                            <p>${trajet.departure}>${trajet.arrival}</p>
+                            <p>${trajet.hour}</p>
+                            <p class='price'><strong>${trajet.price}€</strong></p>
+                            <button class="delBtn" id='${trajet['_id']}'>X</button>
+                        </div>`
+            totalPrice += trajet.price
+        }
+        document.querySelector('#total').textContent = totalPrice
+        deleteFromCart()
     }
-    document.querySelector('#total').textContent = totalPrice
-    deleteFromCart()
+    else {
+        document.querySelector('#bodyCart').innerHTML = `
+        <p> No tickets in your cart</p >
+            <p>Why not plan a trip?</p>`
+    }
+
 })
 
 document.querySelector('#purchaseBtn').addEventListener('click', function () {
     const tripToPurchase = document.querySelectorAll('.trajet')
     for (let trip of tripToPurchase) {
-        console.log(trip)
-        const voyageId = trajet.id
+        console.log('trip', trip)
+        const voyageId = trip.id
         console.log('id', voyageId)
         console.log('trip', trip)
         fetch('http://localhost:3000/voyages/addtobook', {
@@ -51,5 +59,6 @@ document.querySelector('#purchaseBtn').addEventListener('click', function () {
             console.log(`Trip ${trip.id} booked`)
         })
     }
-    window.location.assign('cart.html')
+    window.location.assign('booking.html')
 })
+
